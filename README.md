@@ -10,7 +10,7 @@ https://administrans.fr/
 
 # Contribuer
 
-Afin de travailler efficacement et dans un environnement qui nous convienne, nous travaillons en non-mixité choisie : 
+Afin de travailler efficacement et dans un environnement qui nous convienne, nous travaillons en non-mixité choisie :
 
 1. Avec des personnes trans, effectuant ou cherchant à effectuer une transition administrative
 2. Avec des personnes accompagnant leur(s) proche(s) trans dans leur transision administrative

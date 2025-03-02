@@ -4,7 +4,7 @@ import { inject, watch, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useGlobalStore } from '@/store'
 import { useHead, useSeoMeta } from '@vueuse/head'
-import {getDefaultState} from './store'
+import { getDefaultState } from './store'
 
 import isEqual from 'lodash/isEqual'
 
@@ -16,10 +16,10 @@ const migrate = reactive({
   redirectDomain: import.meta.env.VITE_REDIRECT_DOMAIN,
   currentDomain: window.location.hostname || 'administrans.fr',
   migrateUrl: null,
-  show: true,
+  show: true
 })
 
-function migrateData () {
+function migrateData() {
   let data = window.location.hash.split('#migrate=')[1]
   data = window.decodeURI(data)
   try {
@@ -28,21 +28,20 @@ function migrateData () {
     console.log("Coulnd't parse as JSON:", data)
     return
   }
-  console.log("Migration triggered : Importing data", data)
+  console.log('Migration triggered : Importing data', data)
   store.importData(data)
   router.replace(route.fullPath.split('#')[0])
-
 }
-function updateMigrateUrl () {
+function updateMigrateUrl() {
   let currentUrl = new URL(window.location)
   currentUrl.hostname = migrate.redirectDomain
-  currentUrl.hash = ""
+  currentUrl.hash = ''
   // we grab the current store data to include it in the URL
   const data = {
     formData: store.formData,
     steps: store.steps,
     CecMethod: store.CecMethod,
-    situation: store.situation,
+    situation: store.situation
   }
   if (!isEqual(data, getDefaultState())) {
     currentUrl.hash = `#migrate=${JSON.stringify(data)}`
@@ -52,8 +51,7 @@ function updateMigrateUrl () {
 
 if ((window.location.hash || '').startsWith('#migrate=')) {
   migrateData()
-}
-else if (!!migrate.redirectDomain && migrate.redirectDomain != migrate.currentDomain) {
+} else if (!!migrate.redirectDomain && migrate.redirectDomain != migrate.currentDomain) {
   updateMigrateUrl()
   store.$subscribe(() => {
     updateMigrateUrl()
@@ -64,8 +62,8 @@ useHead({
   meta: [
     {
       'http-equiv': 'content-language',
-      content: `fr-fr`,
-    },
+      content: `fr-fr`
+    }
   ]
 })
 const title = 'Réaliser votre transition administrative'
@@ -80,7 +78,7 @@ useSeoMeta({
   ogDescription: description,
   twitterCard: 'summary',
   twitterTitle: title,
-  twitterDescription: description,
+  twitterDescription: description
 })
 
 const plausible = inject('plausible')
@@ -95,15 +93,15 @@ watch(
         router.replace(match.fullPath)
       }
     }
-    const config = ({
+    const config = {
       url: v,
       domain: window.location.hostname,
       referrer: document.referrer || null,
-      deviceWidth: window.innerWidth,
-    });
+      deviceWidth: window.innerWidth
+    }
     plausible.trackEvent('pageview', {}, config)
   },
-  {immediate: true},
+  { immediate: true }
 )
 </script>
 
@@ -125,7 +123,10 @@ watch(
           Administrans migre sur un nouveau nom de domaine : {{ migrate.redirectDomain }}
         </strong>
       </p>
-      <p>Vos données ne seront pas perdues. Cliquez sur le lien ci-dessous pour être redirigé·e immédiatement.</p>
+      <p>
+        Vos données ne seront pas perdues. Cliquez sur le lien ci-dessous pour être redirigé·e
+        immédiatement.
+      </p>
       <a :href="migrate.migrateUrl" class="button">Migrer vers {{ migrate.redirectDomain }}</a>
       <a href="#" class="mx-2" @click.prevent="migrate.show = false">Me le rappeler plus tard</a>
     </div>
